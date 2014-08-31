@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello World!</title>
+  </head>
+  <body>
+    <h1>Hello World!</h1>
+    We are using node.js <script>document.write(process.version)</script>.
+    <input type="file" id="file">
+    <div id="field"></div>
+    <script type="text/javascript">
+      var field = document.getElementById('field');
+      var file = document.getElementById('file');
+      var fs = require('fs');
+      var reader = new FileReader();
+      var regex = /(<([^>]+)>)/ig;
+
+      file.addEventListener('change', function(){
+        if(this.files && this.files[0]){
+          reader.readAsText(this.files[0], 'utf-8');
+        }
+      }, false);
+
+      reader.onload = function(e){
+        field.innerHTML = e.target.result;
+      }
+      reader.onerror = function(){
+        console.log('Error');
+      }
+    </script>
+  </body>
+</html>
