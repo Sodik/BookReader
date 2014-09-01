@@ -1,0 +1,40 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font: 16px/1.25 "Courier New", Courier, monospace;
+}
+
+#page {
+  height: 100%;
+  width: 100%;
+}
+
+#content {
+  height: 60%;
+}
+
+#content > div {
+  height: 100%;
+  overflow: hidden;
+}
+
+footer {
+  height: 20%;
+}
+
+header {
+  height: 20%;
+}
+
+footer span,
+footer .btn {
+  float: left;
+}
+
+#fake {
+  position: absolute;
+  top: -9999px;
+}

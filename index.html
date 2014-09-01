@@ -3,99 +3,25 @@
   <head>
     <meta charset="utf-8">
     <title>Hello World!</title>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="main.css">
   </head>
   <body>
-    <h1>Hello World!</h1>
-    We are using node.js <script>document.write(process.version)</script>.
-    <input type="file" id="file">
-    <div id="field"></div>
-    <script type="text/javascript">
-      var field = document.getElementById('field');
-      var async = require('async');
-      var file = document.getElementById('file');
-      var fs = require('fs');
-      var reader = new FileReader();
-      var regex = /(<([^>]+)>)/ig;
-      var currentPageNum = 0;
-      var currentPage;
-      var pages;
-
-      file.addEventListener('change', function(){
-        if(this.files && this.files[0]){
-          reader.readAsText(this.files[0], 'utf-8');
-        }
-      }, false);
-
-      reader.onload = function(e){
-        var fake = document.createElement('div');
-        fake.innerHTML = e.target.result;
-        createPages(fake.querySelectorAll('p'));
-        //field.innerHTML = e.target.result;
-        return;
-        var text = e.target.result.replace(regex, '').split(' ');
-        console.log(text.length)
-        createPages(text);
-        //field.innerHTML = e.target.result;
-      }
-      reader.onerror = function(){
-        console.log('Error');
-      }
-
-      function createPages(items){
-        var page = document.createElement('div');
-        field.appendChild(page);
-        async.each(items, function(page){
-          page.appendChild(items[i]);
-          if(page.offsetHeight > document.documentElement.clientHeight){
-            var lastItem = page.lastChild;
-            page.removeChild(page.lastChild);
-            page = document.createElement('div');
-            field.appendChild(page);
-            page.appendChild(lastItem);
-          }
-        });
-        /*for(var i = 0; i < items.length - 1; i++){
-          page.appendChild(items[i]);
-          if(page.offsetHeight > document.documentElement.clientHeight){
-            var lastItem = page.lastChild;
-            page.removeChild(page.lastChild);
-            page = document.createElement('div');
-            field.appendChild(page);
-            page.appendChild(lastItem);
-          }
-        }*/
-        pages = field.children;
-        Array.prototype.slice.call(pages, 0).forEach(function(page){
-          page.style.display = 'none';
-        });
-        currentPage = pages[currentPageNum];
-        currentPage.style.display = 'block';
-        createPagination(pages.length - 1);
-        //field.firstChild
-      }
-
-      function createPagination(size){
-        var list = document.createElement('ul');
-        for(var i = 0; i <  size; i++){
-          var item = document.createElement('li');
-          item.innerHTML = i + 1;
-          list.appendChild(item);
-        }
-        document.body.appendChild(list);
-        list.addEventListener('click', function(e){
-          var item = e.target;
-          if(item.tagName.toLowerCase() === 'li'){
-            switchPage(+item.innerHTML - 1);
-          }
-        }, false);
-      }
-
-      function switchPage(newPageNum){
-        currentPage.style.display = 'none';
-        currentPage = pages[newPageNum];
-        currentPage.style.display = 'block';
-      }
-      
+    <div id="page">
+      <header>
+        <input type="file" id="file">
+      </header>
+      <section id="content">
+        <div></div>
+      </section>
+      <footer>
+        <button class="btn" id="prev">Prev</button>
+        <span id="pagination"></span>
+        <button class="btn" id="next">Next</button>
+      </footer>
+    </div>
+    <div id="fake">m</div>
+    <script type="text/javascript" src="main.js">
     </script>
   </body>
 </html>

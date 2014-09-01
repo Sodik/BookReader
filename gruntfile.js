@@ -1,5 +1,30 @@
 module.exports = function(grunt){
   grunt.initConfig({
+    copy: {
+      main: {
+        options: {
+          process: function(content, srcpath){
+            if(srcpath.indexOf('grunt') != -1){
+              return false;
+            }
+            return content;
+          }
+        },
+        files: [
+          {
+            expand: true,
+            src: ['./node_modules/**'],
+            dest: './webkitbuilds/app/win'
+          }
+        ]
+      }
+    },
+    remove: {
+      options: {
+        trace: true
+      },
+      dirList: ['./webkitbuilds/app/win/node_modules']
+    },
     nodewebkit: {
       options: {
           platforms: ['win','osx', 'linux64'],
@@ -10,13 +35,16 @@ module.exports = function(grunt){
     watch: {
       scripts: {
         files: ['*.js', 'index.html'],
-        tasks: ['nodewebkit']
+        tasks: ['remove', 'nodewebkit', 'copy']
       }
     }
-  })
+  });
 
   grunt.loadNpmTasks('grunt-node-webkit-builder');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-remove');
 
   grunt.registerTask('default', ['watch']);
+  grunt.registerTask('build', ['remove', 'nodewebkit', 'copy']);
 }
