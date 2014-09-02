@@ -4,16 +4,22 @@ body {
 }
 
 body {
-  font: 16px/1.25 "Courier New", Courier, monospace;
+  font: 16px/1.25 'Courier New', Courier, monospace;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 #page {
   height: 100%;
   width: 100%;
+  padding: 0 20px;
 }
 
 #content {
-  height: 60%;
+  height: 100%;
+  padding: 39px 0 83px;
 }
 
 #content > div {
@@ -22,19 +28,61 @@ body {
 }
 
 footer {
-  height: 20%;
+  width: 100%;
+  height: 83px;
+  padding: 5px 10px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
 }
 
 header {
-  height: 20%;
+  width: 100%;
+  height: 39px;
+  padding: 5px 0 0;
+  text-align: center;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
-footer span,
 footer .btn {
   float: left;
+}
+
+footer .clearfix {
+  margin: 0 0 10px;
+}
+
+footer input.form-control {
+  width: 70px;
+  margin: 0 auto;
 }
 
 #fake {
   position: absolute;
   top: -9999px;
+}
+
+.custom-file {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+.custom-file input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  font-size: 200px;
+}
+.custom-file .btn {
+  background: #bdc3c7;
+  color: #fff;
+}
+
+#pagination {
+  display: block;
+  overflow: hidden;
+  text-align: center;
 }

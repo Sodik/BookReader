@@ -23,7 +23,7 @@ module.exports = function(grunt){
       options: {
         trace: true
       },
-      dirList: ['./webkitbuilds/app/win/node_modules']
+      dirList: ['./webkitbuilds']
     },
     nodewebkit: {
       options: {
@@ -35,7 +35,7 @@ module.exports = function(grunt){
     watch: {
       scripts: {
         files: ['*.js', 'index.html'],
-        tasks: ['remove', 'nodewebkit', 'copy']
+        tasks: ['remove', 'nodewebkit']
       }
     }
   });
@@ -44,7 +44,8 @@ module.exports = function(grunt){
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-remove');
+  grunt.loadNpmTasks('grunt-browserify');
 
   grunt.registerTask('default', ['watch']);
-  grunt.registerTask('build', ['remove', 'nodewebkit', 'copy']);
+  grunt.registerTask('build', ['remove', 'nodewebkit']);
 }

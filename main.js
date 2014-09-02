@@ -1,137 +1,126 @@
 'use strict';
+;(function(){
+  var App = {
+    findElements: function(){
+      this.content = document.getElementById('content').children[0];
+      this.fileInput = document.getElementById('file');
+      this.fakeContent = document.getElementById('fake');
+      this.prevBtn = document.getElementById('prev');
+      this.nextBtn = document.getElementById('next');
+      this.pageInput = document.getElementById('set-page');
+      this.pagination = document.getElementById('pagination');
+      this.reader = new FileReader();
+      this.textRegex = /(<([^>]+)>)/ig;
+    },
+    setSettings: function(){
+      this.currentPageNum = 0;
+      this.charSize = {
+        height: this.fakeContent.offsetHeight,
+        width: this.fakeContent.offsetWidth
+      };
+    },
+    attachEvents: function(){
+      var self = this;
 
-var content = document.querySelector('#content').querySelector('div');
-//var async = require('async');
-var file = document.getElementById('file');
-var fs = require('fs');
-var path = require('path');
-var module_path = path.join(path.dirname(process.execPath), 'node_modules', 'async');
-var async = require(module_path);
-var reader = new FileReader();
-var regex = /(<([^>]+)>)/ig;
-var currentPageNum = 0;
-var currentPage;
-var pages;
-var text;
-var pagination = document.querySelector('#pagination');
-var fake = document.querySelector('#fake');
-var charHeight = fake.offsetHeight;
-var charWidth = fake.offsetWidth;
-var charsSize;
-var colsSize;
-var rowsSize;
-var formatedText = '';
+      this.fileInput.addEventListener('change', function(){
+        if(this.files && this.files[0]){
+          self.reader.readAsText(this.files[0], 'utf-8');
+        }
+      }, false);
 
-file.addEventListener('change', function(){
-  if(this.files && this.files[0]){
-    reader.readAsText(this.files[0], 'utf-8');
-  }
-}, false);
+      this.reader.addEventListener('load', function(e){
+        this.originalText = e.target.result.replace(this.textRegex, '')/*.replace(/\s{2,}/g, ' ')*/.split(' ');
+        this.copiedText = this.originalText.slice(0);
+        this.calculatePageSize();
+      }.bind(this), false);
 
-reader.onload = function(e){
-  text = e.target.result.replace(regex, '').replace(/\s{2,}/g, ' ').split(' ');
-  calculatePageSize(text);
-}
+      this.reader.addEventListener('error', function(){
+        alert('Failed to open Book');
+      }, false);
 
-reader.onerror = function(){
-  console.log('Error');
-}
+      this.prevBtn.addEventListener('click', function(e){
+        if(this.currentPageNum > 0){
+          this.currentPageNum--;
+          this.switchPage();
+        }
+      }.bind(this), false);
 
-document.querySelector('footer').addEventListener('click', function(e){
-  var target = e.target;
-  if(target.id && target.id === 'prev'){
-    if(currentPageNum > 0){
-      currentPageNum--;
-      switchPage();
-    }
-  }
-  if(target.id && target.id === 'next'){
-    console.log(pages, currentPageNum)
-    if(currentPageNum < pages){
-      currentPageNum++;
-      switchPage();
-    }
-  }
-}, false);
+      this.nextBtn.addEventListener('click', function(e){
+        if(this.pagesSize && this.currentPageNum < this.pagesSize - 1){
+          this.currentPageNum++;
+          this.switchPage();
+        }
+      }.bind(this), false);
 
-function calculatePageSize(text){
-  var page = document.createElement('div');
-  var contentHeight = content.offsetHeight;
-  var contentWidth = content.offsetWidth;
-  rowsSize = Math.floor(contentHeight/charHeight);
-  colsSize = Math.floor(contentWidth/charWidth);
-  charsSize = rowsSize*colsSize;
-  console.log(contentHeight, contentWidth, rowsSize, colsSize, charsSize)
-  formatingText(text);
-  switchPage();
-  /*content.innerHTML = '';
-  content.appendChild(page);
-  async.each(items, function(page){
-    page.appendChild(items[i]);
-    if(page.offsetHeight > document.documentElement.clientHeight){
-      var lastItem = page.lastChild;
-      page.removeChild(page.lastChild);
-      page = document.createElement('div');
-      field.appendChild(page);
-      page.appendChild(lastItem);
-    }
-  });
-  for(var i = 0; i < words.length - 1; i++){
-    page.appendChild(items[i]);
-    if(page.offsetHeight > content.offsetHeight){
-      var lastItem = page.lastChild;
-      page.removeChild(page.lastChild);
-      page = document.createElement('div');
-      content.appendChild(page);
-      page.appendChild(lastItem);
-    }
-  }*/
+      this.pageInput.addEventListener('keyup', function(e){
+        if(e.keyCode === 13){
+          console.log(Math.min(Math.min(this.value.replace(/[^\d,]/g, '') - 1, 0), self.pagesSize - 1))
+          return;
+          self.currentPageNum = Math.min(Math.min(this.value.replace(/[^\d,]/g, '') - 1, 0), self.pagesSize - 1);
+          self.switchPage();
+        }
+      }, false);
 
-  /*pages = content.children;
-  Array.prototype.slice.call(pages, 0).forEach(function(page){
-    page.style.display = 'none';
-  });
-  currentPage = pages[currentPageNum];
-  currentPage.style.display = 'block';
-  updatePagination(pages.length - 1);*/
-}
+      window.addEventListener('resize', function(){
+        if(this.originalText){
+          this.copiedText = this.originalText.slice(0);
+          this.calculatePageSize();
+        }
+      }.bind(this), false);
+    },
+    calculatePageSize: function(){
+      this.contentHeight = this.content.offsetHeight;
+      this.contentWidth = this.content.offsetWidth;
+      this.rowsSize = Math.floor(this.contentHeight/this.charSize.height);
+      this.colsSize = Math.floor(this.contentWidth/this.charSize.width);
 
-function updatePagination(){
-  pagination.innerHTML = (currentPageNum + 1) + '/' + pages;
-}
-
-function switchPage(){
-  content.innerHTML = formatedText[currentPageNum].join('');
-  updatePagination();
-}
-
-function formatingText(text){
-  formatedText = [[]];
-  var arrIndex = 0;
-  var counter = 0;
-  var rowCount = 0;
-  var arr = formatedText[arrIndex];
-  var flag = false;
-  formatedText.push(arr);
-  while(text.length){
-    var word = text.splice(0, 1)[0] + ' ';
-    if(flag){
-      counter = 0;
-      flag = false;
-    }
-    counter += word.length;
-    if(counter >= colsSize){
-      flag = true;
-      rowCount++;
-      if(rowCount >= rowsSize){
-        rowCount = 0;
-        formatedText.push([]);
-        arrIndex++;
-        arr = formatedText[arrIndex];
+      this.formatingText();
+    },
+    updatePagination: function(){
+      this.pagination.innerHTML = (this.currentPageNum + 1) + '/' + this.pagesSize;
+    },
+    switchPage: function(){
+      this.content.innerHTML = this.formatedText[this.currentPageNum].join('');
+      this.getLastPosition();
+      this.updatePagination();
+    },
+    formatingText: function(){
+      this.formatedText = [[]];
+      var arrIndex = 0;
+      var counter = 0;
+      var rowCount = 1;
+      var arr = this.formatedText[arrIndex];
+      while(this.copiedText.length){
+        var word = this.copiedText.splice(0, 1)[0] + ' ';
+        counter += word.length;
+        //console.log(counter, colsSize, word, word.length)
+        if(counter - 1 > this.colsSize){
+          counter = word.length;
+          rowCount++;
+          //console.log(counter, rowCount, 'Column', word)
+          if(rowCount > this.rowsSize){
+            rowCount = 1;
+            //console.log( counter, '----Row----')
+            this.formatedText.push([]);
+            arrIndex++;
+            arr = this.formatedText[arrIndex];
+          }
+        }
+        arr.push(word + ' ');
       }
+      this.pagesSize = this.formatedText.length;
+      this.switchPage();
+    },
+    getLastPosition: function(){
+      console.log(this.formatedText[this.currentPageNum])
+      console.log(this.formatedText.indexOf(this.formatedText[this.currentPageNum][0]))
+    },
+    init: function(){
+      this.findElements();
+      this.setSettings();
+      this.attachEvents();
     }
-    arr.push(word);
   }
-  console.log(formatedText)
-  pages = formatedText.length - 1;
-}
+
+  App.init();
+})();

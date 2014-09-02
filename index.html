@@ -2,26 +2,32 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Hello World!</title>
+    <title>BookReader</title>
+    <link rel="stylesheet" href="font-awesome.min.css">
     <link rel="stylesheet" href="bootstrap.min.css">
     <link rel="stylesheet" href="main.css">
   </head>
   <body>
     <div id="page">
       <header>
-        <input type="file" id="file">
+        <div class="custom-file">
+            <button class="btn btn-default"><i class="fa fa-upload"></i> Select files</button>
+            <input id="file" type="file">
+        </div>
       </header>
       <section id="content">
         <div></div>
       </section>
       <footer>
-        <button class="btn" id="prev">Prev</button>
-        <span id="pagination"></span>
-        <button class="btn" id="next">Next</button>
+        <div class="clearfix">
+          <button class="btn" id="prev"><i class="fa fa-arrow-left"></i> Prev</button>
+          <button class="btn pull-right" id="next">Next <i class="fa fa-arrow-right"></i></button>
+          <span id="pagination"></span>
+        </div>
+        <input id="set-page" type="text" class="form-control">
       </footer>
     </div>
     <div id="fake">m</div>
-    <script type="text/javascript" src="main.js">
-    </script>
+    <script type="text/javascript" src="main.js"></script>
   </body>
 </html>
