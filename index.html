@@ -8,25 +8,29 @@
     <link rel="stylesheet" href="main.css">
   </head>
   <body>
-    <div id="page">
-      <header>
-        <div class="custom-file">
-            <button class="btn btn-default"><i class="fa fa-upload"></i> Select files</button>
-            <input id="file" type="file">
-        </div>
-      </header>
-      <section id="content">
+    <header id="header">
+      <div class="custom-file">
+          <button class="btn btn-default"><i class="fa fa-upload"></i> Select files</button>
+          <input id="file" type="file">
+      </div>
+    </header>
+    <section id="content">
+      <div class="content-holder">
         <div></div>
-      </section>
-      <footer>
-        <div class="clearfix">
-          <button class="btn" id="prev"><i class="fa fa-arrow-left"></i> Prev</button>
-          <button class="btn pull-right" id="next">Next <i class="fa fa-arrow-right"></i></button>
-          <span id="pagination"></span>
+      </div>
+    </section>
+    <footer>
+      <div class="clearfix">
+        <button class="btn" id="prev"><i class="fa fa-arrow-left"></i> Prev</button>
+        <button class="btn pull-right" id="next">Next <i class="fa fa-arrow-right"></i></button>
+        <div id="pagination">
+          <div id="progress"></div>
+          <div class="progress-bar-wrapper">
+            <div id="progress-bar"></div>
+          </div>
         </div>
-        <input id="set-page" type="text" class="form-control">
-      </footer>
-    </div>
+      </div>
+    </footer>
     <div id="fake">m</div>
     <script type="text/javascript" src="main.js"></script>
   </body>
