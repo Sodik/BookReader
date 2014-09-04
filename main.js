@@ -1,8 +1,16 @@
 'use strict';
 ;(function(){
+  global.nw = require('nw.gui');
   var path = require('path');
   var appPath = path.dirname(process.execPath);
-  var fileManager = require(appPath + '/modules/fileManager')(document);
+  console.log(appPath)
+  try{
+    var fileManager = require(appPath + '/modules/fileManager')(document);
+    var Panel = require(appPath + '/modules/panel')(document);
+  }catch(e){
+    var fileManager = require('modules/fileManager')(document);
+    var Panel = require('modules/panel')(document);
+  }
 
   var App = {
     findElements: function(){
@@ -80,13 +88,13 @@
     init: function(){
       this.findElements();
       this.attachEvents();
-      this.fileManager = fileManager.init({
+      /*this.fileManager = fileManager.init({
         holder: document.getElementById('file-manager'),
         path: appPath,
-        doc: document
-      });
+      });*/
     }
   }
 
   App.init();
+  Panel.init();
 })();
