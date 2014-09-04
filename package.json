@@ -4,7 +4,8 @@
   "version": "0.0.1",
   "window": {
     "icon": "favicon.ico",
-    "tools": false,
+    "toolbar": false,
+    "frame": false,
     "min_width": 700,
     "min_height": 430
   },

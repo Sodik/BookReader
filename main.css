@@ -79,3 +79,17 @@ footer .btn {
   border-radius: 0.5vh;
   width: 0;
 }
+
+/* file manager */
+#file-manager {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  overflow: auto;
+  display: none;
+}

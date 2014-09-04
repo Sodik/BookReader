@@ -1,5 +1,9 @@
 'use strict';
 ;(function(){
+  var path = require('path');
+  var appPath = path.dirname(process.execPath);
+  var fileManager = require(appPath + '/modules/fileManager')(document);
+
   var App = {
     findElements: function(){
       this.contentWrapper = document.getElementById('content').children[0];
@@ -17,12 +21,15 @@
       var self = this;
 
       this.fileInput.addEventListener('change', function(){
+        /*self.fileManager.show();
+        return;*/
         if(this.files && this.files[0]){
           self.reader.readAsText(this.files[0], 'utf-8');
         }
       }, false);
 
       this.reader.addEventListener('load', function(e){
+        console.log(111111111111)
         this.originalText = e.target.result.replace(this.textRegex, '');
         this.calculatePageSize();
       }.bind(this), false);
@@ -73,6 +80,11 @@
     init: function(){
       this.findElements();
       this.attachEvents();
+      this.fileManager = fileManager.init({
+        holder: document.getElementById('file-manager'),
+        path: appPath,
+        doc: document
+      });
     }
   }
 
