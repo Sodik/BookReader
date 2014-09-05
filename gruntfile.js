@@ -46,7 +46,13 @@ module.exports = function(grunt){
     },
     shell: {
       patchApp: {
-        command: 'cd webkitbuilds/app/linux64 && sed -i \'s/udev\.so\.0/udev.so.1/g\' app',
+        command: [
+          'cd webkitbuilds/app/linux32',
+          'sed -i \'s/udev\.so\.0/udev.so.1/g\' app',
+          'cd ..',
+          'cd linux64',
+          'sed -i \'s/udev\.so\.0/udev.so.1/g\' app',
+        ].join('&&'),
         options: {
           callback: function(err, stdout, stderr, cb){
             cb();
