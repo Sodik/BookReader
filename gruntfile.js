@@ -1,4 +1,6 @@
 module.exports = function(grunt){
+  require('load-grunt-tasks')(grunt);
+
   grunt.initConfig({
     copy: {
       main: {
@@ -42,6 +44,16 @@ module.exports = function(grunt){
         tasks: ['remove', 'nodewebkit']
       }
     },
+    shell: {
+      patchApp: {
+        command: 'cd webkitbuilds/app/linux64 && sed -i \'s/udev\.so\.0/udev.so.1/g\' app',
+        options: {
+          callback: function(err, stdout, stderr, cb){
+            cb();
+          }
+        }
+      }
+    }
   });
 
   grunt.loadNpmTasks('grunt-node-webkit-builder');
@@ -51,5 +63,5 @@ module.exports = function(grunt){
 
 
   grunt.registerTask('default', ['watch']);
-  grunt.registerTask('build', ['remove', 'nodewebkit', 'copy']);
+  grunt.registerTask('build', ['remove', 'nodewebkit', 'copy', 'shell:patchApp']);
 }
