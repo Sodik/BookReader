@@ -1,5 +1,13 @@
+var fs = require('fs');
+
 module.exports = function(grunt){
   require('load-grunt-tasks')(grunt);
+  var config = JSON.parse(fs.readFileSync('package.json'));
+  if(config.name){
+    var patchStr = 'sed -i \'s/udev\.so\.0/udev.so.1/g\' '+config.name+'';
+  }else{
+    var patchStr = 'sed -i \'s/udev\.so\.0/udev.so.1/g\' app';
+  }
 
   grunt.initConfig({
     copy: {
@@ -48,10 +56,10 @@ module.exports = function(grunt){
       patchApp: {
         command: [
           'cd webkitbuilds/app/linux32',
-          'sed -i \'s/udev\.so\.0/udev.so.1/g\' app',
+          patchStr,
           'cd ..',
           'cd linux64',
-          'sed -i \'s/udev\.so\.0/udev.so.1/g\' app',
+          patchStr
         ].join('&&'),
         options: {
           callback: function(err, stdout, stderr, cb){
