@@ -11,6 +11,10 @@ body {
   box-sizing: border-box;
 }
 
+p {
+  margin: 0;
+}
+
 header {
   height: 10vh;
   padding: 0.83vh 3vh;

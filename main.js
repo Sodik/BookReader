@@ -38,7 +38,7 @@
 
       this.reader.addEventListener('load', function(e){
         console.log(111111111111)
-        this.originalText = e.target.result.replace(this.textRegex, '');
+        this.originalText = e.target.result;
         this.calculatePageSize();
       }.bind(this), false);
 
