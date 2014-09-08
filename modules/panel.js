@@ -1,9 +1,11 @@
+var extend = require('./extend');
 var win = global.nw.Window.get();
 win.isMaximized = false;
 
 module.exports = function(document){
   return {
-    init: function(){
+    init: function(opts){
+      this.options = extend({}, opts);
       this.findElements();
       this.attachEvents();
     },
@@ -15,8 +17,11 @@ module.exports = function(document){
     },
     attachEvents: function(){
       this.btnClose.addEventListener('click', function(){
+        if(this.options.onBeforeClose && typeof this.options.onBeforeClose === 'function'){
+          this.options.onBeforeClose();
+        }
         win.close();
-      }, false);
+      }.bind(this), false);
 
       this.btnMinimize.addEventListener('click', function(){
         win.minimize();

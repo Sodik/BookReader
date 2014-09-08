@@ -80,8 +80,10 @@ footer .btn {
 
 .progress-bar-wrapper {
   height: 2vh;
-  padding: 0 2vh;
+  margin: 0 2vh;
   overflow: hidden;
+  border-radius: 0.5vh;
+  background: #333;
 }
 
 #progress-bar {
